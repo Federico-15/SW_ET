@@ -68,6 +68,14 @@
 </div>
 
 
+## 🚀 시스템 구성도
+
+<div align="center">
+  <img src="[https://github.com/user-attachments/assets/613d015c-1166-4e75-8b43-73aaae32beab](https://github.com/user-attachments/assets/a604b0c1-dcdd-46ca-9f2d-08548387cd45)" width="600px" alt="기술스택 아이콘">
+</div>
+
+
+
 ## 🛠️ 주요 의존성 패키지 버전
 
 - **Spring Boot Starter Data JPA**: 3.0.3
