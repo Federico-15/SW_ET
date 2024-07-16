@@ -64,7 +64,7 @@
 
 ## 💻 기술스택
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/613d015c-1166-4e75-8b43-73aaae32beab" width="200px" alt="기술스택 아이콘">
+  <img src="https://github.com/user-attachments/assets/613d015c-1166-4e75-8b43-73aaae32beab" width="450px" alt="기술스택 아이콘">
 </div>
 
 
