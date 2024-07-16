@@ -15,7 +15,8 @@
   <tr>
     <td align="center" width="120px">
       <a href="">
-        <img src="" alt="류승환 프로필" />
+        <img src="![류승환 사진](https://github.com/user-attachments/assets/0c559a2c-883b-4c5c-b07c-2578c26e2eaa)
+" alt="류승환 프로필" />
       </a>
     </td>
   </tr>
