@@ -71,7 +71,7 @@
 ## 🚀 시스템 구성도
 
 <div align="center">
-  <img src="[https://github.com/user-attachments/assets/613d015c-1166-4e75-8b43-73aaae32beab](https://github.com/user-attachments/assets/a604b0c1-dcdd-46ca-9f2d-08548387cd45)" width="600px" alt="기술스택 아이콘">
+  <img src="https://github.com/user-attachments/assets/eb1a47ef-dbd8-4a22-9b08-a8fff3b55721" width="600px">
 </div>
 
 
