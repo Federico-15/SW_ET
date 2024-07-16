@@ -49,6 +49,12 @@
 
 ## 📦 주요 기능 
 
+
+https://github.com/user-attachments/assets/2015ce78-4e29-4fc3-8379-f4be8d133ea0
+
+
+
+
 ### USER SIDE
 ⚡️ 로그인/회원가입
 
