@@ -71,39 +71,50 @@
 | Latest ✔️                 |
 
 
-## 🛠️ 주요 의존성 패키지 버전 (추후 변경)
+## 🛠️ 주요 의존성 패키지 버전
 
-- **@emotion/react**: ^11.11.3
-- **@emotion/styled**: ^11.11.0
-- **@mui/icons-material**: ^5.15.5
-- **@mui/joy**: ^5.0.0-beta.23
-- **@mui/material**: ^5.15.5
-- **@mui/x-data-grid**: ^6.19.1
-- **axios**: ^1.6.5
-- **polished**: ^4.2.2
-- **react**: ^18.2.0
-- **recoil**:
-- **react-dom**: ^18.2.0
-- **react-icons**: ^5.0.1
-- **react-router-dom**: ^6.21.2
-- **styled-components**: ^6.1.8
+- **Spring Boot Starter Data JPA**: 3.0.3
+- **Spring Boot Starter Security**: 3.0.3
+- **Spring Boot Starter Web**: 3.0.3
+- **Spring Boot Starter Thymeleaf**: 3.0.3
+- **Spring Boot Starter Batch**: 3.0.3
+- **Spring Boot Starter Mail**: 3.0.3
+- **Spring Boot Starter Validation**: 3.0.3
+- **Spring Boot Starter JDBC**: 3.0.3
+- **MyBatis Spring Boot Starter**: 2.3.0
+- **MariaDB Java Client**: 2.7.4
+- **JWT (io.jsonwebtoken)**: 0.11.5
+- **Thymeleaf Extras Spring Security6**: 3.1.1.RELEASE
+- **Hibernate Validator**: 7.0.1.Final
+- **Spring Security Crypto**: 6.0.1
+- **SpringDoc OpenAPI Starter WebMvc UI**: 2.0.3
+- **Lombok**: 1.18.26
+- **Jakarta Servlet API**: 6.0.0
+- **MySQL Connector Java**: 8.0.30
+- **Swagger Annotations**: 1.6.2
 
 
-## 📁 Project Structure (추후 변경)
-Presentation and Container 컴포넌트 패턴을 사용했습니다.
+## 📁 Project Structure
+Model View Controller 컴포넌트 패턴을 사용했습니다.
 ```bash
-├── 📦 public
-├── 📦 src 
-│       └── 📂 assets
-│           ├── 📂 icons
-│           └── 📂 images
-│       └── 📂 components
-│           ├── 📂 common
-│           └── 📂 user
-│           └── 📂 admin
-│       └── 📂pages
-│           ├── 📂 user
-│           └── 📂 admin
-│       └── 📂 recoil
-│       └── 📂 utils
+├── build
+├── gradle
+├── out
+├── src
+│   └── main
+│       ├── java
+│       │   └── SW_ET
+│       │       ├── config
+│       │       ├── controller
+│       │       ├── DataSet
+│       │       ├── dto
+│       │       ├── entity
+│       │       ├── exceptions
+│       │       ├── repository
+│       │       ├── service
+│       │       └── Application.java
+│       ├── resources
+│       │   ├── static
+│       │   ├── templates
+│       │   └── application.yml
 └── 
