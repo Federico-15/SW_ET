@@ -45,6 +45,8 @@
 발길닿는곳에 대한 설명
 
 
+
+
 ## 📦 주요 기능 
 
 ### USER SIDE
@@ -59,8 +61,8 @@
 ⚡️ 여행지 리뷰 (CRUD, 좋아요-싫어요,댓글 기능)
 
 
-## 💻 지원 브라우저
-| <img src="https://github.com/DKT-Kwanza/dmarket-front/assets/79887939/0146835c-745d-433a-8c6a-060d6febe788" width=80px alt="chrome"> |
+## 💻   기술스택
+| <img src="https://github.com/user-attachments/assets/613d015c-1166-4e75-8b43-73aaae32beab"> |
 |---------------------------|
 | Latest ✔️                 |
 
