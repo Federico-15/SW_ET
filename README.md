@@ -50,20 +50,9 @@
 ## 📦 주요 기능 
 
 
-<div style="display: flex; justify-content: space-between;">
-  <div style="width: 49%;">
-    <video width="100%" controls>
-      <source src="https://github.com/user-attachments/assets/2015ce78-4e29-4fc3-8379-f4be8d133ea0" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-  </div>
-  <div style="width: 49%;">
-    <video width="100%" controls>
-      <source src="https://github.com/user-attachments/assets/cc302473-747e-4ec7-9c54-523d86450c86" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-  </div>
-</div>
+https://github.com/user-attachments/assets/2015ce78-4e29-4fc3-8379-f4be8d133ea0
+
+https://github.com/user-attachments/assets/cc302473-747e-4ec7-9c54-523d86450c86
 
 
 
