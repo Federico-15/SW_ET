@@ -62,7 +62,7 @@
 
 
 ## 💻   기술스택
-| <img src="https://github.com/user-attachments/assets/613d015c-1166-4e75-8b43-73aaae32beab"> |
+| <img src="https://github.com/user-attachments/assets/613d015c-1166-4e75-8b43-73aaae32beab width="200" height="400"> |
 |---------------------------|
 | Latest ✔️                 |
 
