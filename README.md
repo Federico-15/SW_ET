@@ -10,8 +10,7 @@
 
 <table>
 <tr>
-<td align="center">FE<strong></strong></td>
-<td align="center">BE</td>
+<td align="center">FE & BE<strong></strong></td>
 </tr>
   <tr>
     <td align="center" width="120px">
