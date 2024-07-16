@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap');
+
+#pageTitle h1 {
+    margin-top: 10px;
+    margin-left: 50px;
+    font-family: "Noto Serif KR", serif;
+}
+hr {
+    border: none; /* 기본 테두리를 제거합니다 */
+    border-top: 1px solid #ccc; /* 상단 테두리를 추가하고 색상을 지정합니다*/
+}
+#loginForm {
+    margin: 0;
+    display: flex;
+    flex-direction: column; /* 세로 방향으로 요소를 배치합니다. */
+    justify-content: center; /* 요소들을 가로로 가운데 정렬합니다. */
+    align-items: center;
+    height: 650px;
+    padding: 20px;
+    width: 100%;
+    font-family: "Noto Serif KR", serif;
+}
+/* 아이디 비번 입력 */
+.form-group1 input[type="text"],
+.form-group1 input[type="password"] {
+    width: 604px;
+    padding: 25px;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    box-sizing: border-box;
+    margin-bottom: 30px;
+}
+.form-group1 {
+    display: flex;
+    flex-direction: column;
+}
+
+/* 소셜로그인 링크 */
+.form-group2 button[class="imgbutton"] {
+    cursor: pointer;
+    border: none;
+    background: none;
+    margin-right: 30px;
+    margin-bottom: 30px;
+}
+/* 페이지 이동 링크 */
+.form-group3 {
+    display: flex;  /* Flexbox를 사용하여 내부 요소들을 유연하게 정렬합니다 */
+    justify-content: center;  /* 요소들을 가운데 정렬합니다 */
+    align-items: center;  /* 요소들을 세로 방향으로 중심에 맞춥니다 */
+    width: 604px;  /* 부모 요소와 일치하는 너비를 설정합니다 */
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 30px;
+}
+.form-group3 button {
+    flex: 1;  /* 모든 버튼이 동일한 비율로 공간을 차지하도록 합니다 */
+    padding: 20px;  /* 버튼의 패딩을 조정하여 높이를 적절하게 설정합니다 */
+    background-color: rgb(96, 189, 255);
+    border: none;
+    color: #fff;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 0 10px;  /* 버튼 사이에 적당한 간격을 둡니다 */
+}
+.form-group3 .button:hover {
+    background-color: #61aeff;
+}
+
+.form-group2 {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 30px;
+}

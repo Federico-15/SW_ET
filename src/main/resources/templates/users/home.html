@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>메인 페이지</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" th:href="@{/css/header.css}">
+  <link rel="stylesheet" th:href="@{/css/footer.css}">
+
+  <style>
+    .region-card {
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .region-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .card-img-top {
+      height: 200px;
+      object-fit: cover;
+      object-position: center; /* 이미지를 중앙에 위치시킵니다 */
+    }
+    .card {
+      height: 350px; /* 카드의 높이를 고정합니다 */
+      display: flex;
+      flex-direction: column; /* 카드 내용을 세로로 정렬 */
+    }
+    .card-body {
+      flex-grow: 1; /* 카드 본문이 남은 공간을 모두 채우도록 설정 */
+    }
+  </style>
+</head>
+<body>
+
+<!-- 헤더 -->
+<div th:replace="~{fragment/header :: header}"></div>
+
+<br>
+<br>
+<br>
+<br>
+
+<div class="container mt-4">
+  <div class="row">
+    <!-- 서울 -->
+    <div class="col-md-4 mb-4" onclick="location.href='http://localhost:8080/api/regions/1'">
+      <div class="card region-card">
+        <img src="/images/seoul.jpg" class="card-img-top" alt="서울특별시">
+        <div class="card-body">
+          <h5 class="card-title">서울특별시</h5>
+          <p class="card-text">서울의 다양한 문화와 역사를 경험하세요.</p>
+        </div>
+      </div>
+    </div>
+    <!-- 경기도 -->
+    <div class="col-md-4 mb-4" onclick="location.href='http://localhost:8080/api/regions/2'">
+      <div class="card region-card">
+        <img src="/images/gyeonggi.jpg" class="card-img-top" alt="경기도">
+        <div class="card-body">
+          <h5 class="card-title">경기도</h5>
+          <p class="card-text">경기도의 자연과 문화를 탐험하세요.</p>
+        </div>
+      </div>
+    </div>
+    <!-- 인천 -->
+    <div class="col-md-4 mb-4" onclick="location.href='http://localhost:8080/api/regions/3'">
+      <div class="card region-card">
+        <img src="/images/incheon.jpg" class="card-img-top" alt="인천광역시">
+        <div class="card-body">
+          <h5 class="card-title">인천광역시</h5>
+          <p class="card-text">인천의 근대 역사와 항구를 즐기세요.</p>
+        </div>
+      </div>
+    </div>
+    <!-- 부산 -->
+    <div class="col-md-4 mb-4" onclick="location.href='http://localhost:8080/api/regions/4'">
+      <div class="card region-card">
+        <img src="/images/busan.jpg" class="card-img-top" alt="부산광역시">
+        <div class="card-body">
+          <h5 class="card-title">부산광역시</h5>
+          <p class="card-text">부산의 해변과 축제를 경험하세요.</p>
+        </div>
+      </div>
+    </div>
+    <!-- 대구 -->
+    <div class="col-md-4 mb-4" onclick="location.href='http://localhost:8080/api/regions/5'">
+      <div class="card region-card">
+        <img src="/images/daegu.jpg" class="card-img-top" alt="대구광역시">
+        <div class="card-body">
+          <h5 class="card-title">대구광역시</h5>
+          <p class="card-text">대구의 문화와 맛집을 탐방하세요.</p>
+        </div>
+      </div>
+    </div>
+    <!-- 울산 -->
+    <div class="col-md-4 mb-4" onclick="location.href='http://localhost:8080/api/regions/6'">
+      <div class="card region-card">
+        <img src="/images/ulsan.jpg" class="card-img-top" alt="울산광역시">
+        <div class="card-body">
+          <h5 class="card-title">울산광역시</h5>
+          <p class="card-text">울산의 산업 유산과 자연을 체험하세요.</p>
+        </div>
+      </div>
+    </div>
+    <!-- 경상남도 -->
+    <div class="col-md-4 mb-4" onclick="location.href='http://localhost:8080/api/regions/8'">
+      <div class="card region-card">
+        <img src="/images/gyeongnam.jpg" class="card-img-top" alt="경상남도">
+        <div class="card-body">
+          <h5 class="card-title">경상남도</h5>
+          <p class="card-text">경상남도의 풍부한 역사와 아름다운 해안선을 탐험하세요.</p>
+        </div>
+      </div>
+    </div>
+    <!-- 경상북도 -->
+    <div class="col-md-4 mb-4" onclick="location.href='http://localhost:8080/api/regions/7'">
+      <div class="card region-card">
+        <img src="/images/gyeongbuk.jpg" class="card-img-top" alt="경상북도">
+        <div class="card-body">
+          <h5 class="card-title">경상북도</h5>
+          <p class="card-text">경상북도의 역사적 유적과 자연 경관을 탐험하세요.</p>
+        </div>
+      </div>
+    </div>
+    <!-- 광주광역시 -->
+    <div class="col-md-4 mb-4" onclick="location.href='http://localhost:8080/api/regions/9'">
+      <div class="card region-card">
+        <img src="/images/gwangju.jpg" class="card-img-top" alt="광주광역시">
+        <div class="card-body">
+          <h5 class="card-title">광주광역시</h5>
+          <p class="card-text">광주의 예술과 문화를 경험하세요.</p>
+        </div>
+      </div>
+    </div>
+    <!-- 전라북도 -->
+    <div class="col-md-4 mb-4" onclick="location.href='http://localhost:8080/api/regions/10'">
+      <div class="card region-card">
+        <img src="/images/jeonbuk.jpg" class="card-img-top" alt="전라북도">
+        <div class="card-body">
+          <h5 class="card-title">전라북도</h5>
+          <p class="card-text">전라북도의 풍성한 민속 문화와 맛집을 즐겨보세요.</p>
+        </div>
+      </div>
+    </div>
+    <!-- 전라남도 -->
+    <div class="col-md-4 mb-4" onclick="location.href='http://localhost:8080/api/regions/11'">
+      <div class="card region-card">
+        <img src="/images/jeonnam.jpg" class="card-img-top" alt="전라남도">
+        <div class="card-body">
+          <h5 class="card-title">전라남도</h5>
+          <p class="card-text">전라남도의 아름다운 섬과 남도의 음식을 체험하세요.</p>
+        </div>
+      </div>
+    </div>
+    <!-- 대전광역시 -->
+    <div class="col-md-4 mb-4" onclick="location.href='http://localhost:8080/api/regions/12'">
+      <div class="card region-card">
+        <img src="/images/daejeon.jpg" class="card-img-top" alt="대전광역시">
+        <div class="card-body">
+          <h5 class="card-title">대전광역시</h5>
+          <p class="card-text">대전의 과학 기술과 자연을 함께 경험하세요.</p>
+        </div>
+      </div>
+    </div>
+    <!-- 충청북도 -->
+    <div class="col-md-4 mb-4" onclick="location.href='http://localhost:8080/api/regions/13'">
+      <div class="card region-card">
+        <img src="/images/chungbuk.jpg" class="card-img-top" alt="충청북도">
+        <div class="card-body">
+          <h5 class="card-title">충청북도</h5>
+          <p class="card-text">충청북도의 다양한 축제와 자연을 탐험하세요.</p>
+        </div>
+      </div>
+    </div>
+    <!-- 충청남도 -->
+    <div class="col-md-4 mb-4" onclick="location.href='http://localhost:8080/api/regions/14'">
+      <div class="card region-card">
+        <img src="/images/chungnam.jpg" class="card-img-top" alt="충청남도">
+        <div class="card-body">
+          <h5 class="card-title">충청남도</h5>
+          <p class="card-text">충청남도의 역사적 유적과 천혜의 자연을 체험하세요.</p>
+        </div>
+      </div>
+    </div>
+    <!-- 세종특별자치시 -->
+    <div class="col-md-4 mb-4" onclick="location.href='http://localhost:8080/api/regions/15'">
+      <div class="card region-card">
+        <img src="/images/sejong.jpg" class="card-img-top" alt="세종특별자치시">
+        <div class="card-body">
+          <h5 class="card-title">세종특별자치시</h5>
+          <p class="card-text">세종시의 현대적인 도시 생활과 문화를 경험하세요.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-4" onclick="location.href='http://localhost:8080/api/regions/16'">
+      <div class="card region-card">
+        <img src="/images/gangwon.jpg" class="card-img-top" alt="강원도">
+        <div class="card-body">
+          <h5 class="card-title">강원도</h5>
+          <p class="card-text">강원도의 자연경관과 함께 힐링하세요.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 제주특별자치도 -->
+    <div class="col-md-4 mb-4" onclick="location.href='http://localhost:8080/api/regions/17'">
+      <div class="card region-card">
+        <img src="/images/jeju.jpg" class="card-img-top" alt="제주특별자치도">
+        <div class="card-body">
+          <h5 class="card-title">제주특별자치도</h5>
+          <p class="card-text">제주의 자연과 특색 있는 문화를 체험하세요.</p>
+        </div>
+      </div>
+    </div>
+    <!-- 추가 지역 -->
+    <!-- 각 지역별 카드를 여기에 계속 추가하십시오. -->
+  </div>
+</div>
+
+<!-- 푸터 -->
+<div th:replace="~{fragment/footer :: footer}"></div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

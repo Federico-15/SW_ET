@@ -1,0 +1,63 @@
+.card-img-top {
+    width: 100%; /* 이미지 너비를 카드 너비에 맞춤 */
+    height: 15vw; /* 이미지 높이를 뷰포트 너비의 비율로 설정 */
+    object-fit: cover; /* 이미지가 카드 영역을 넘지 않도록 조정 */
+}
+
+.custom-margin-top {
+    margin-top: 120px; /* 예시로 64px를 사용하였으나, 필요에 따라 조정 가능 */
+}
+
+/*페이징처리하는 버튼 css 코드*/
+.pagination-container {
+    display: flex;
+    justify-content: center; /* 중앙 정렬 */
+    margin-top: 20px; /* 상단 여백 추가 */
+}
+
+.pagination a {
+    color: #007bff; /* 링크 기본 색상 */
+    background-color: #fff; /* 배경 색상 */
+    border: 1px solid #dee2e6; /* 테두리 색상 */
+}
+
+.pagination .active a {
+    color: #fff; /* 활성 페이지 글자 색상 */
+    background-color: #007bff; /* 활성 페이지 배경 색상 */
+    border-color: #007bff; /* 활성 페이지 테두리 색상 */
+}
+
+.pagination a:hover {
+    color: #0056b3; /* 호버 상태 글자 색상 */
+    text-decoration: none; /* 호버 상태 밑줄 제거 */
+}
+
+.pagination .disabled a {
+    color: #6c757d; /* 비활성 링크 색상 */
+}
+
+.sticky-top {
+    position: sticky;
+    top: 100px; /* Adjust this value based on your header's height */
+    z-index: 1020;
+}
+
+.nav-pills {
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.nav-link {
+    margin-bottom: 5px;
+    transition: background-color 0.3s;
+}
+
+.nav-link:hover {
+    background-color: #e0e0e0;
+}
+
+.nav-link.active {
+    color: #fff;
+    background-color: #007bff;
+}

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인</title>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <th:block th:replace="/fragment/config.html :: configFragment"></th:block>
+    <!--    <script src="/js/login.js?v=1"></script>       --> <!-- 로그인 파라미터 체크 - 사용자가 아이디, 비밀번호 모두 체크했는지 확인 -->
+</head>
+<body>
+<div id="header">
+<th:block th:replace="/fragment/header.html :: headerFragment"></th:block>
+</div>
+<div id="pageTitle">
+    <br>
+    <br>
+    <br>
+    <h1>로그인 페이지</h1>
+</div>
+<form id="loginForm" th:action="@{/users/login_proc}" method="post">
+    <div class="form-group1">
+        <input type="text" id="userId" name="userId" placeholder="아이디를 입력하세요" required>
+        <input type="password" id="userPassword" name="userPassword" placeholder="비밀번호를 입력하세요" required>
+    </div>
+<!--    <div class="form-group2">
+        <button class="imgbutton"><img src="/images/login_google.png" onclick="location.href='.'" ></button>
+        <button class="imgbutton"><img src="/images/login_kakao.png" onclick="location.href='.'" ></button>
+    </div>-->
+    <div class="form-group3">
+        <button class="button" type="button" onclick="window.location.href='/users/register' ">회원 가입하기</button>
+        <button class="button" type="submit">로그인</button>
+    </div>
+</form>
+<div id="footer">
+    <th:block th:replace="/fragment/footer.html :: footerFragment"></th:block>
+</div>
+<script>
+    /* 작성 폼 전송 */
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // 폼의 기본 제출 동작 방지
+
+        // 입력된 사용자 정보를 객체로 생성
+        var loginDto = {
+            userId: document.getElementById('userId').value,
+            userPassword: document.getElementById('userPassword').value
+        };
+
+        // 서버로 로그인 요청 전송
+        fetch('/users/login_proc', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(loginDto)  // loginDto 객체를 JSON 문자열로 변환하여 요청 본문에 포함
+        })
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        // 401 Unauthorized 상태 처리
+                        return response.json().then(data => {
+                            throw new Error(data.message);
+                        });
+                    } else {
+                        throw new Error('Network response was not ok');
+                    }
+                }
+                return response.json();  // 응답 본문을 JSON 객체로 변환
+            })
+            .then(data => {
+                if (data.jwt) {   // 서버가 JWT를 반환하면 로그인 성공으로 간주
+                    console.log('로그인 성공, JWT:', data.jwt);  // JWT를 콘솔에 출력
+                    localStorage.setItem('jwtToken', data.jwt);  // JWT를 로컬 스토리지에 저장
+                    window.location.href = "/users/home";  // 홈 페이지로 리다이렉트
+                } else {
+                    console.log('로그인 실패: ' + data.message);
+                    alert("아이디 혹은 비밀번호를 확인해주세요");
+                }
+            })
+            .catch(error => {
+                if (error.message === 'Invalid credentials') {
+                    alert("아이디 혹은 비밀번호를 확인해주세요");  // 401 오류 메시지 처리
+                } else {
+                    console.error('로그인 중 오류가 발생했습니다.', error);  // 다른 오류를 콘솔에 출력
+                    alert("아이디 혹은 비밀번호를 확인해주세요");
+                }
+            });
+    });
+</script>
+<!--<script src="/js/jwtRead.js"></script>-->
+</body>
+</html>

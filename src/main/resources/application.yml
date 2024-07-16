@@ -1,0 +1,83 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/ET_DB?sessionVariables=foreign_key_checks=0  # MySQL 데이터베이스 URL, 외래 키 검사 비활성화
+    username: root  # 데이터베이스 사용자 이름
+    password: 1234  # 데이터베이스 사용자 비밀번호
+    driver-class-name: com.mysql.cj.jdbc.Driver  # MySQL JDBC 드라이버
+    hikari:
+      maximum-pool-size: 20  # HikariCP 최대 연결 풀 크기 설정
+  web:
+    resources:
+      static-locations: classpath:/static/, classpath:/public/, classpath:/resources/, classpath:/META-INF/resources/
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: [Your Email]
+    password: [Your App Password]
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+    auth-code-expiration-millis: 1800000  # 30 * 60 * 1000 == 30분
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update # 데이터베이스 테이블 자동 생성 설정
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+        use_sql_comments: true
+      jakarta:
+        persistence:
+          sharedCache:
+            mode: ALL  # JPA 공유 캐시 모드 설정
+    show-sql: true
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+    cache: false  # 개발 중 캐시 비활성화
+
+  security:
+    user:
+      name: admin  # 기본 관리자 사용자 이름
+      password: adminpass  # 기본 관리자 비밀번호
+
+  messages:
+    basename: messages  # 메시지 소스 파일의 기본 이름
+
+  cache:
+    type: simple  # 캐시 유형 설정
+
+
+server:
+  port: 8080  # 애플리케이션 서버 포트 번호
+  servlet:
+    session:
+      cookie:
+        name: JSESSIONID  # 세션 쿠키 이름 설정
+        http-only: true  # HttpOnly 플래그를 true로 설정하여 JavaScript가 쿠키에 접근할 수 없도록 함
+
+logging:
+  level:
+    root: TRACE
+    org.springframework.security: TRACE  # Spring 프레임워크 로깅 수준
+    org.hibernate.SQL: DEBUG  # Hibernate SQL 쿼리 로깅 수준
+    SW_ET.controller : TRACE
+    SW_ET.service : TRACE
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n"  # 콘솔 로그 출력 패턴
+
+jwt:
+  secret: your_512-bit-secret_key
+  expiration: 3600000  # 1 hour in milliseconds

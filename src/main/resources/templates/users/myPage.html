@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Page</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            margin-top: 20px;
+        }
+
+        .card {
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            height: 100%; /* Ensure all cards are of equal height */
+        }
+
+        .card-img-top {
+            height: 180px;
+            object-fit: cover;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .favorite-destination-card, .review-card {
+            width: 100%; /* 카드 너비 고정 */
+        }
+
+        .review-card .card-body {
+            height: 150px; /* 리뷰 카드 바디 높이 */
+        }
+
+        .card-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .card-title, .card-text {
+            flex-grow: 1; /* Allows text to expand and fill space */
+        }
+        .btn-primary {
+            margin-top: auto; /* Pushes the button to the bottom */
+            background-color: #333;
+            border-color: #333;
+        }
+        .btn-primary:hover {
+            background-color: #555;
+            border-color: #555;
+        }
+
+        .delete-btn {
+            position: absolute; /* 절대 위치 설정 */
+            top: 10px; /* 상단에서 10px */
+            right: 10px; /* 우측에서 10px */
+            z-index: 10; /* 다른 요소들 위에 오도록 z-index 설정 */
+        }
+
+        .star-rating {
+            font-size: 0;
+            unicode-bidi: bidi-override;
+            direction: rtl;
+            text-align: left;
+        }
+        .star-rating .star {
+            display: inline-block;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #d0d0d0; /* 빈 별의 색상 */
+        }
+        .star-rating .star.filled {
+            color: #ffc107; /* 채워진 별의 색상 */
+        }
+
+        .pagination .page-link {
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .pagination .active .page-link {
+            background-color: #333;
+            color: white;
+        }
+
+    </style>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+</head>
+<body>
+<div th:replace="~{fragment/header :: header}"></div>
+
+<div class="container">
+    <br></br>
+    <br></br>
+    <h2>내가 찜한 여행지</h2>
+    <div id="favoriteDestinations" class="row">
+        <!-- 여기에서 자바스크립트를 통해 데이터를 동적으로 삽입할 것입니다. -->
+    </div>
+
+    <h2>나의 리뷰</h2>
+    <div id="userReviews">
+        <!-- 여기에서 자바스크립트를 통해 데이터를 동적으로 삽입할 것입니다. -->
+    </div>
+</div>
+
+<div th:replace="~{fragment/footer :: footer}"></div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.9/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="/js/jwtRead.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        loadMyPageData();
+
+        document.getElementById('userReviews').addEventListener('click', function(event) {
+            if (event.target.classList.contains('delete-btn')) {
+                const reviewId = event.target.getAttribute('data-review-id');
+                deleteReview(reviewId);
+            }
+        });
+    });
+
+
+    function loadMyPageData() {
+        const token = localStorage.getItem('jwtToken');
+        if (!token) {
+            alert('Please log in to view this page.');
+            return;
+        }
+
+        fetch('/api/my-page', {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            if (response.ok) {
+                response.json().then(data => {
+                    displayMyPage(data);
+                });
+            } else {
+                alert('Unable to load the page. Please log in again.');
+            }
+        }).catch(error => {
+            console.error('Failed to fetch:', error);
+        });
+    }
+
+    function displayMyPage(data) {
+        const favoriteDestinationsDiv = document.getElementById('favoriteDestinations');
+        const userReviewsDiv = document.getElementById('userReviews');
+
+        // Favorite Destinations 렌더링
+        favoriteDestinationsDiv.innerHTML = data.favoriteDestinations.map(destination => `
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="${destination.imageUrls && destination.imageUrls.length > 0 ? destination.imageUrls[0] : '/images/default-image.jpg'}" class="card-img-top" alt="Favorite Destination Image">
+                    <div class="card-body">
+                        <h5 class="card-title">${destination.title}</h5>
+                        <p class="card-text">${destination.oneLineDesc}</p>
+                        <a href="/api/sub-regions/${destination.subRegionId}/details/${destination.id}" class="btn btn-primary">Details</a>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        // User Reviews 렌더링
+        userReviewsDiv.innerHTML = data.userReviews.map(review => `
+    <div class="card mb-3" id="review-${review.reviewId}">
+        <div class="card-body">
+            <h5 class="card-title">
+                <a href="/api/reviews/detail/${review.reviewId}">${review.reviewTitle}</a>
+            </h5>
+            <p class="card-text">${review.reviewText}</p>
+            <p class="card-text"><small class="text-muted">${review.datePosted}</small></p>
+            <button class="delete-btn" data-review-id="${review.reviewId}">Delete</button>
+        </div>
+    </div>
+`).join('');
+    }
+
+    function deleteReview(reviewId) {
+        if (!confirm('정말 이 리뷰를 삭제하시겠습니까?')) return;
+
+        const token = localStorage.getItem('jwtToken');
+        fetch(`/api/reviews/${reviewId}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': 'Bearer ' + token }
+        }).then(response => {
+            if (response.ok) {
+                alert('Review deleted successfully.');
+                // Directly remove the review from the DOM
+                document.getElementById(`review-${reviewId}`).remove();
+            } else {
+                alert('Failed to delete the review.');
+            }
+        }).catch(error => {
+            console.error('Error deleting review:', error);
+            alert('There was a problem deleting the review.');
+        });
+    }
+
+
+</script>
+</body>
+</html>

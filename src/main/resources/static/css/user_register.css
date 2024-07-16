@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap');
+
+#pageTitle h1{
+    margin-top: 10px;
+    margin-left: 50px;
+    font-family: "Noto Serif KR", serif;
+}
+hr{
+    border: none; /* 기본 테두리를 제거합니다 */
+    border-top: 1px solid #ccc; /* 상단 테두리를 추가하고 색상을 지정합니다*/
+}
+#registrationForm {
+    margin-top: 40px;
+    margin-left: 20%;
+    height: 600px;
+    width: auto;
+    font-family: "Noto Serif KR", serif;
+}
+
+/* 이름 아이디 비번 이메일 입력 */
+.form-group input[type="text"],
+.form-group input[type="password"],
+select {
+    font-size: 15px;;
+    width: 500px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-sizing: border-box;
+    margin-bottom: 25px;
+}
+
+/* 중복검사, 이메일 인증 버튼 */
+#registrationForm .form-group .id_check, .nickname_check{
+    background-color: #d1d1d1;
+    border: none;
+    padding:5px 13px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 15px;
+    margin-left: 20px;
+}
+
+/* 가입하기 버튼 */
+#submit {
+    width: 150px;
+    padding: 10px;  /* 버튼의 세로 높이 지정*/
+    background-color: rgb(96, 189, 255);
+    border: none;
+    color: #fff;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 16px;
+    float: right;
+    margin-right: 35%;
+    margin-bottom: 20px;;
+}
+#submit:hover {
+    background-color: #61aeff;
+}

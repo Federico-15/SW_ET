@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:text="${selectedRegionName} + '의 가볼만한 곳'">Sub-Region Travel Destinations</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <link rel="stylesheet" th:href="@{/css/header.css}">
+  <link rel="stylesheet" th:href="@{/css/footer.css}">
+  <style>
+    @font-face {
+      font-family: 'S-CoreDream-3Light';
+      src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    .card {
+      position: relative;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      padding-bottom: 50px; /* 버튼 컨테이너 높이만큼 여유 공간 추가 */
+    }
+
+    .button-container {
+      position: absolute; /* 절대 위치 설정 */
+      bottom: 10px; /* 카드 하단에서 10px 위에 위치 */
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between; /* 좌우 정렬 */
+      padding: 0 15px; /* 버튼과 카드 경계 사이의 여백 */
+    }
+
+    .favorite-btn {
+      /* 절대 위치를 사용하지 않고 플렉스 아이템으로 변경 */
+    }
+
+    /* 기타 스타일 */
+    body, header, .card-title, h1, h2, h3, h4, h5, h6 {
+      font-family: 'S-CoreDream-3Light', sans-serif;
+    }
+    header, footer {
+      color: white;
+      padding: 10px 0;
+      text-align: center;
+    }
+    .nav-link {
+      color: #333;
+      transition: color 0.3s;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: #333;
+    }
+    .card-img-top {
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    }
+    .card-title {
+      color: #333;
+    }
+    .pagination .page-link {
+      background-color: #f8f9fa;
+      color: #333;
+    }
+    .pagination .active .page-link {
+      background-color: #333;
+      color: white;
+    }
+
+    .nav-link.active-sub-region {
+      font-weight: bold; /* 굵은 글씨로 표시 */
+      color: #333; /* 색상 변경 */
+      text-decoration: underline; /* 밑줄을 추가하여 더 강조 */
+    }
+
+    /* "자세히 보기" 버튼 색상 변경 */
+    .btn-primary {
+      background-color: #333;
+      border-color: #333;
+    }
+    .btn-primary:hover {
+      background-color: #555;
+      border-color: #555;
+    }
+  </style>
+</head>
+<body>
+<div th:replace="~{fragment/header :: header}"></div>
+
+<div class="container-fluid custom-margin-top">
+  <div class="row">
+    <div class="col-md-9">
+      <h1 th:text="${selectedRegionName} + ' 추천 여행지'">Sub-Region Travel Destinations</h1>
+      <div class="row">
+        <div th:each="destination, stat : ${destinations}" class="col-md-4 mb-4">
+          <div class="card h-100">
+            <img th:src="${#lists.isEmpty(destination.imageUrls) ? '/images/default-image.jpg' : destination.imageUrls[0]}" class="card-img-top" alt="여행지 이미지">
+            <div class="card-body">
+              <h5 class="card-title" th:text="${destination.title}">Destination Title</h5>
+              <p class="card-text" th:text="${destination.oneLineDesc}">Short Description</p>
+              <div class="button-container">
+                <a th:href="@{/api/sub-regions/{subRegionId}/details/{destinationId}(subRegionId=${destination.subRegionId}, destinationId=${destination.id})}" class="btn btn-primary">자세히 보기</a>
+                <button class="btn btn-outline-danger favorite-btn" th:attr="data-destination-id=${destination.id}" onclick="toggleFavorite(this)">찜하기</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="sticky-top" style="top: 100px;">
+        <ul class="nav nav-pills flex-column">
+          <li th:each="subRegion : ${subRegions}" class="nav-item">
+            <a th:href="@{/api/sub-regions/{id}(id=${subRegion.subRegionId})}"
+               th:text="${subRegion.subRegionName}"
+               th:classappend="${subRegion.subRegionId == subRegionId} ? 'nav-link active-sub-region' : 'nav-link'"></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+  <!-- 리뷰 섹션 -->
+  <div class="row">
+    <div class="col-12">
+      <h2>  지역 리뷰</h2>
+      <div th:each="review : ${subRegionReviews}" class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">
+            <a th:href="@{/api/reviews/detail/{reviewId}(reviewId=${review.reviewId})}" th:text="${review.reviewTitle}">리뷰 제목</a>
+          </h5>
+          <p class="card-text" th:text="${review.reviewText}"></p>
+          <p class="card-text"><small class="text-muted" th:text="${review.datePosted}"></small></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+      <li class="page-item" th:classappend="${page.number < 5} ? 'disabled' : ''">
+        <a class="page-link" th:href="@{/api/sub-regions/{subRegionId}(subRegionId=${subRegionId}, page=${page.number - 5})}" aria-label="Previous Range">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <li th:each="i : ${#numbers.sequence((page.number / 5) * 5, ((page.number / 5) * 5) + 4)}"
+          class="page-item" th:classappend="${i == page.number} ? 'active' : ''">
+        <a class="page-link" th:href="@{/api/sub-regions/{subRegionId}(subRegionId=${subRegionId}, page=${i})}" th:text="${i + 1}"></a>
+      </li>
+      <li class="page-item" th:classappend="${((page.number / 5) + 1) * 5 >= page.totalPages} ? 'disabled' : ''">
+        <a class="page-link" th:href="@{/api/sub-regions/{subRegionId}(subRegionId=${subRegionId}, page=${page.number + 5})}" aria-label="Next Range">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <div th:replace="~{fragment/footer :: footer}"></div>
+</div>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.9/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    function toggleFavorite(button) {
+      const destinationId = button.getAttribute('data-destination-id');
+      const action = button.classList.contains('btn-outline-danger') ? 'POST' : 'DELETE';
+      const url = '/api/favorites/' + destinationId;
+
+      const token = localStorage.getItem('jwtToken');
+
+      fetch(url, {
+        method: action,
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          'Content-Type': 'application/json'
+        }
+      }).then(response => {
+        if (response.ok) {
+          if (action === 'POST') {
+            button.classList.remove('btn-outline-danger');
+            button.classList.add('btn-danger');
+            button.textContent = '찜 취소';
+          } else {
+            button.classList.remove('btn-danger');
+            button.classList.add('btn-outline-danger');
+            button.textContent = '찜하기';
+          }
+        } else {
+          response.text().then(text => {
+            console.error('Error:', text);
+            alert('찜 상태를 변경하는데 실패했습니다.');
+          });
+        }
+      }).catch(error => {
+        console.error('Fetch error:', error);
+        alert('서버와 통신 중 오류가 발생했습니다.');
+      });
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      const favoriteButtons = document.querySelectorAll('.favorite-btn');
+      favoriteButtons.forEach(button => {
+        const destinationId = button.getAttribute('data-destination-id');
+        checkFavoriteStatus(destinationId, button);
+      });
+    });
+
+    function checkFavoriteStatus(destinationId, button) {
+      const token = localStorage.getItem('jwtToken');
+      fetch(`/api/favorites/status/${destinationId}`, {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      })
+              .then(response => response.json())
+              .then(isFavorite => {
+                if (isFavorite) {
+                  button.classList.remove('btn-outline-danger');
+                  button.classList.add('btn-danger');
+                  button.textContent = '찜 취소';
+                } else {
+                  button.classList.remove('btn-danger');
+                  button.classList.add('btn-outline-danger');
+                  button.textContent = '찜하기';
+                }
+              })
+              .catch(error => console.error('Error fetching favorite status:', error));
+    }
+  </script>
+</body>
+</html>

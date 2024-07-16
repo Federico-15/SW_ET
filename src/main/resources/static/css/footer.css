@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap');
+
+footer{
+  font-family: "Noto Serif KR", serif;
+  display: flex; /* 요소들을 수평으로 배치하기 위해 flexbox를 사용합니다. */
+  justify-content: space-between; /* 요소들을 양쪽 끝으로 정렬합니다. */
+  align-items: center; /* 요소들을 수직 가운데로 정렬합니다. */ 
+  width:100%;   /* 너비 */
+  height:80px;  /* 높이 */
+  border-top:1px solid #b8b8b8; /* 나중에 지우기 */
+  position: relative;
+  bottom: 0;
+  padding-top: 5px;
+  }
+
+  #company {
+    float: left; /* 왼쪽으로 플로팅합니다. */
+    font-size: 14px; /* p 요소의 글자 크기를 조정합니다. */
+    color: #aaa; /* p 요소의 글자 색상을 조정합니다. */
+    margin-left: 30px;
+  }
+  
+  #sns {
+    float: right; /* 오른쪽으로 플로팅합니다. */
+    margin-right: 30px;
+  }
+  
+  #sns ul {
+    display: flex; /* 유연한 박스 레이아웃을 사용하여 요소를 수평으로 배치합니다. */
+  }
+  
+  #sns ul li {
+    margin-right: 10px; /* 이미지 사이의 간격을 조정합니다. */
+  }
+  
+  #sns ul li:last-child {
+    margin-right: 0; /* 마지막 이미지의 우측 마진을 제거하여 간격이 균일하게 유지됩니다. */
+  }

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>리뷰 작성 페이지</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/review_register.css">
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- 별점 평가 시 사용 -->
+  <link rel="stylesheet" th:href="@{/css/header.css}">
+  <link rel="stylesheet" th:href="@{/css/footer.css}">
+
+  <th:block th:replace="/fragment/config.html :: configFragment"></th:block>
+</head>
+<body>
+<div id="header">
+  <th:block th:replace="/fragment/header.html :: headerFragment"></th:block>
+</div>
+<div id="pageTitle">
+  <br>
+  <br>
+  <br>
+  <h2>리뷰 작성</h2>
+  <hr>
+</div>
+<form id="reviewForm" th:action="@{/reviews}" method="post" enctype="multipart/form-data" onsubmit="return submitForm();">
+  <textarea id="reviewTitle" name="reviewTitle" placeholder="리뷰 제목을 작성해주세요." required></textarea>
+  <!-- 지역 선택 -->
+  <div class="select-container">
+    <select id="regionSelect" name="regionId" class="region" required>
+      <option value="">행정구역을 선택해주세요</option>
+    </select>
+    <select id="subregionSelect" name="subRegionId" class="region" required>
+      <option value="">시.도청 소재지를 선택해주세요</option>
+    </select>
+  </div>
+  <!-- 별점 평가 -->
+  <div class="star_rating" id="star_rating"> <!-- 아이디 바뀔 수 있음 -->
+    <span class="star on" value="1"> </span>
+    <span class="star" value="2"> </span>
+    <span class="star" value="3"> </span>
+    <span class="star" value="4"> </span>
+    <span class="star" value="5"> </span>
+  </div>
+  <input type="hidden" id="starRating" name="rating" value="1"> <!-- 숨겨진 별점 필드 -->
+  <!-- 리뷰 사진 등록 -->
+  <button id="insert_img" class="btn btn-light" type="button" onclick="openFilePicker()">이미지 첨부하기</button>
+  <input type="file" id="fileInput" name="image" style="display: none;" accept="image/*" onchange="previewImage(event)"> <!-- 숨겨진 파일 입력 필드 -->
+  <img id="imagePreview" src="" alt="Image Preview" style="display: none; max-width: 100%; height: auto;"/> <!-- 이미지 미리보기 -->
+  <button id="cancel_img" class="btn btn-light" type="button" onclick="cancelImage()" style="display: none;" >선택 취소</button>
+  <!-- 글 작성 -->
+  <textarea id="reviewText" name="reviewText" placeholder="리뷰 내용을 작성해주세요." required></textarea>
+  <!-- 제출 버튼 -->
+  <button id="review_submit" type="submit">리뷰 등록</button>
+</form>
+<div id="footer">
+  <th:block th:replace="/fragment/footer.html :: footerFragment"></th:block>
+</div>
+<!--<script src="/js/jwtRead.js"></script>-->F
+<script src="/js/regionSelect.js"></script> <!-- 지역 선택 -->
+<script src="/js/review_star_rank.js"></script> <!-- 별점 평가 -->
+<script src="/js/review_insert_img.js"></script> <!-- 이미지 첨부, 미리보기 -->
+<script>
+  function submitForm() {
+    event.preventDefault(); // 폼 기본 제출 동작(페이지 리로드)을 막음
+
+    const userKeyId = getUserKeyIdFromToken(); // 사용자 키 ID를 토큰에서 동적으로 가져오기
+    if (!userKeyId) {
+      alert("로그인 상태가 아닙니다. 로그인 페이지로 이동합니다.");
+      window.location.href = '/login'; // 로그인 페이지로 이동
+      return;
+    }
+
+    const reviewTitle = document.getElementById("reviewTitle").value;
+    const regionId = document.getElementById("regionSelect").value;
+    const subregionId = document.getElementById("subregionSelect").value;
+    const reviewText = document.getElementById("reviewText").value;
+    const starRating = document.getElementById("starRating").value;
+    const fileInput = document.getElementById("fileInput").files[0];
+
+    // 리뷰 데이터 객체 생성
+    const reviewData = {
+      userKeyId: userKeyId,
+      reviewTitle: reviewTitle,
+      reviewText: reviewText,
+      useYn: true,
+      regionId: regionId,
+      subRegionId: subregionId,
+      rating: starRating
+    };
+
+    // FormData 객체 생성 및 리뷰 데이터 추가
+    const formData = new FormData();
+    formData.append("review", JSON.stringify(reviewData));  // 서버가 요구하는 'review' 파트 추가
+    if (fileInput) {
+      formData.append("image", fileInput);  // 이미지 파일이 선택된 경우 추가
+    }
+
+    const token = getToken();
+    if (!token) {
+      alert("로그인 상태가 아닙니다. 로그인 페이지로 이동합니다.");
+      window.location.href = '/login'; // 로그인 페이지로 이동
+      return;
+    }
+
+    // fetch API를 사용하여 서버에 폼 데이터를 POST 요청으로 보냄
+    fetch('/api/reviews/register', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      body: formData
+    })
+            .then(response => {
+              if (response.ok) {
+                return response.json(); // JSON 형식으로 응답을 파싱
+              } else if (response.status === 403) {
+                throw new Error('접근 권한이 없습니다. 로그인 상태를 확인해주세요.');
+              } else {
+                throw new Error('리뷰 등록 실패');
+              }
+            })
+            .then(data => {
+              console.log('성공:', data);
+              window.location.href = `/users/home`; // 성공 시 리뷰가 등록된 지역의 상세 페이지로 이동
+            })
+            .catch(error => {
+              console.error('실패:', error);
+              alert(error.message); // 에러 메시지를 사용자에게 알림
+            });
+  }
+
+  function getUserKeyIdFromToken() {
+    const token = localStorage.getItem('jwtToken');
+    if (!token) return null;
+
+    const base64Url = token.split('.')[1]; // JWT의 Payload 부분
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const payload = JSON.parse(window.atob(base64));
+
+    return payload.userKeyId; // Payload 내에 userKeyId가 있다고 가정
+  }
+
+  function getToken() {
+    // JWT 토큰을 로컬 스토리지에서 가져옴
+    return localStorage.getItem('jwtToken');
+  }
+</script>
+</body>
+</html>

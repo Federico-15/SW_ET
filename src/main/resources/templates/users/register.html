@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <br>
+    <br>
+    <br>
+    <title>회원가입</title>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <link rel="stylesheet" th:href="@{/css/user_register.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <th:block th:replace="/fragment/config.html :: configFragment"></th:block>
+</head>
+<body>
+<div id="header">
+    <th:block th:replace="/fragment/header.html :: headerFragment"></th:block>
+</div>
+<div id="pageTitle">
+    <h1>회원가입</h1>
+    <hr>
+</div>
+<form id="registrationForm" th:action="@{/users/register}" method="post" onsubmit="return submitForm();">
+    <div class="form-group">
+        <input type="text" id="userNickName" name="userNickName" placeholder="닉네임 입력" required>
+        <input type="button" class="nickname_check" onclick="checkUserNicknameExists()" value="닉네임 중복검사">
+    </div>
+    <div class="form-group">
+        <input type="text" id="userId" name="userId" placeholder="아이디 입력" required>
+        <input type="button" class="id_check" onclick="checkUserIdExists()" value="아이디 중복검사">
+    </div>
+    <div class="form-group">
+        <input type="password" id="userPassword" name="userPassword" placeholder="비밀번호 입력" required>
+    </div>
+    <div class="form-group">
+        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="비밀번호 확인" required>
+    </div>
+    <button type="submit" id="submit">가입하기</button>
+</form>
+<div id="footer">
+    <th:block th:replace="/fragment/footer.html :: footerFragment"></th:block>
+</div>
+<script>
+    function submitForm() {
+        var form = document.getElementById('registrationForm');
+        var formData = new FormData(form);
+        var jsonObject = {};
+
+        formData.forEach(function(value, key) {
+            jsonObject[key] = value;
+        });
+
+        fetch('/users/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonObject)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.resultCode === '0000') {
+                    window.location.href = "/users/login_proc";
+                } else {
+                    alert('회원가입 실패: ' + (data.error || data));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('서버와의 통신 중 오류가 발생했습니다.');
+            });
+
+        return false;  // 폼의 기본 제출 방지
+    }
+</script>
+<script src="/js/idCheck.js"></script>
+<script src="/js/nicknameCheck.js"></script>
+<!--<script src="/js/jwtRead.js"></script>-->
+</body>
+</html>

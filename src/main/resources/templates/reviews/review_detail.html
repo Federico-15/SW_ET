@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>리뷰 상세보기</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/review_detail.css">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .rating-label {
+            font-weight: bold; /* 글자를 두껍게 표시 */
+            margin-right: 10px; /* 별점과의 간격 설정 */
+        }
+
+        .star_rating {
+            display: flex;
+            flex-direction: row; /* 별을 가로로 나열 */
+            justify-content: center; /* 내용을 중앙 정렬 */
+            width: 100%; /* 필요하다면 전체 너비를 사용 */
+            margin-bottom: 10px; /* 아래쪽 여백 */
+        }
+
+        .star_rating .star {
+            width: 25px;
+            height: 25px;
+            margin-right: 10px;
+            display: inline-block;
+            background: url('/images/empty_star.png') no-repeat center;  /* 배경 이미지 중앙에 위치 */
+            background-size: cover;
+            cursor: pointer;
+        }
+
+        .star_rating .star.on {
+            background: url('/images/full_star.png') no-repeat center; /* 배경 이미지 중앙에 위치 */
+            background-size: cover;
+        }
+
+        .review-rating-number {
+            display: none; /* 평점 숫자를 보이지 않게 설정 */
+        }
+        .review-rating {
+            display: flex;          /* Flexbox를 사용하여 아이템들을 가로로 배열 */
+            justify-content: center; /* 중앙 정렬 */
+            align-items: center;     /* 세로 방향 중앙 정렬 */
+            width: 100%;            /* 부모 컨테이너의 전체 너비 사용 */
+        }
+    </style>
+</head>
+<body>
+<div id="header">
+    <th:block th:replace="/fragment/header.html :: headerFragment"></th:block>
+</div>
+
+<br>
+<br>
+<br>
+<div class="container mt-4">
+    <div class="header-row d-flex justify-content-between align-items-center">
+        <h2 th:text="${review.reviewTitle}">리뷰 제목</h2>
+        <div class="review-info text-right">
+            <span>작성자: <span th:text="${review.userNickName}">작성자</span></span><br>
+            <span>작성일자: <span th:text="${formattedDate}">작성일자</span></span>
+        </div>
+    </div>
+    <img th:src="${review.imageUrl}" alt="Review Image" class="review-image img-fluid"/>
+    <p class="review-text" th:text="${review.reviewText}">리뷰 내용</p>
+
+    <div class="review-rating">
+        <span class="rating-label">별점 평가:</span> <!-- Label for the rating -->
+        <span id="reviewRatingStars"></span> <!-- 별점을 표시할 요소 -->
+        <span class="review-rating-number" th:text="${review.rating}"></span>
+    </div>
+
+
+    <div class="center-container">
+    <img id="likeButton" src="/images/after_like.png" alt="Like" style="cursor: pointer; width: 50px;">
+        <span id="likeCount">0</span>
+        <img id="dislikeButton" src="/images/after_dislike.png" alt="Dislike" style="cursor: pointer; width: 50px;">
+        <span id="dislikeCount">0</span>
+    </div>
+</div>
+
+<!-- 댓글 섹션 -->
+<div id="comments-section" class="comments-section">
+    <h3>댓글</h3>
+    <ul id="comments-list" class="list-unstyled">
+        <!-- JS로 댓글 목록을 동적으로 채웁니다 -->
+    </ul>
+    <form id="comment-form">
+        <textarea id="comment-text" class="form-control" placeholder="댓글을 입력하세요."></textarea>
+        <button type="submit" class="btn btn-primary mt-2">댓글 등록</button>
+    </form>
+</div>
+
+<div id="footer">
+    <th:block th:replace="/fragment/footer.html :: footerFragment"></th:block>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.min.js"></script>
+<script src="/js/reviewDetails.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const likeButton = document.getElementById('likeButton');
+        const dislikeButton = document.getElementById('dislikeButton');
+        const likeCountDisplay = document.getElementById('likeCount');
+        const dislikeCountDisplay = document.getElementById('dislikeCount');
+        const reviewId = window.location.pathname.split('/').pop(); // URL에서 리뷰 ID 추출
+        const commentsList = document.getElementById('comments-list');
+        const ratingElement = document.getElementById('reviewRatingStars');
+        const reviewRating = parseInt(document.querySelector('.review-rating-number').textContent, 10);
+        ratingElement.innerHTML = renderStars(reviewRating);
+
+        // 페이지 로드 시 좋아요/싫어요 카운트를 서버로부터 불러오기
+        fetchLikeCounts();
+
+        likeButton.addEventListener('click', () => {
+            if (!getJwtToken()) {
+                alert("로그인 한 사용자만 이용 가능한 기능입니다.");
+                return;
+            }
+            updateLike(true, '좋아요');
+        });
+
+        dislikeButton.addEventListener('click', () => {
+            if (!getJwtToken()) {
+                alert("로그인 한 사용자만 이용 가능한 기능입니다.");
+                return;
+            }
+            updateLike(false, '싫어요');
+        });
+
+        function renderStars(rating) {
+            let starsHtml = '<div class="star_rating">';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    starsHtml += '<span class="star on"></span>';
+                } else {
+                    starsHtml += '<span class="star"></span>';
+                }
+            }
+            starsHtml += '</div>';
+            return starsHtml;
+        }
+
+
+        function updateLike(likeStatus, action) {
+            const token = getJwtToken();
+            const url = `/api/reviews/${reviewId}/likes?likeStatus=${likeStatus}`;
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('네트워크 응답 오류');
+                    }
+                    if (response.headers.get("Content-Type").includes("application/json")) {
+                        return response.json();
+                    } else {
+                        return response.text();
+                    }
+                })
+                .then(data => {
+                    if (typeof data === 'string') { // 텍스트 응답 처리
+                        alert(`${action} 상태: ${data}`);
+                    } else { // JSON 응답 처리
+                        alert(`${action} 상태가 업데이트되었습니다: ` + JSON.stringify(data));
+                        fetchLikeCounts();
+                    }
+                })
+                .catch(error => {
+                    console.error(`${action} 토글 중 오류 발생:`, error);
+                    alert(`${action} 토글 실패: ` + error.message);
+                });
+        }
+
+        function fetchLikeCounts() {
+            const token = getJwtToken();
+            fetch(`/api/reviews/${reviewId}/likes/counts`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    likeCountDisplay.textContent = data.likeCount || 0;
+                    dislikeCountDisplay.textContent = data.dislikeCount || 0;
+                })
+                .catch(error => {
+                    console.error('카운트 가져오기 실패:', error);
+                    alert('카운트를 가져오는데 실패했습니다: ' + error.message);
+                });
+        }
+
+        function getJwtToken() {
+            return localStorage.getItem('jwtToken');
+        }
+
+        const commentForm = document.getElementById('comment-form');
+        const commentText = document.getElementById('comment-text');
+
+        // 댓글 폼 이벤트 리스너
+        commentForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            createComment();
+        });
+
+        commentsList.addEventListener('click', function(event) {
+            if (event.target.classList.contains('delete-comment')) {
+                const commentId = event.target.dataset.commentId;  // data-comment-id 속성 접근 방법
+                deleteComment(commentId);
+            }
+        });
+
+        function loadComments() {
+            fetch(`/api/reviews/${reviewId}/comments`)
+                .then(response => response.json())
+                .then(comments => {
+                    commentsList.innerHTML = comments.map(comment => `
+            <li>
+                <strong>${comment.username}</strong>: ${comment.commentText}
+                <button class="delete-comment" data-comment-id="${comment.commentId}">삭제</button>
+            </li>
+        `).join('');
+                }).catch(error => {
+                console.error('댓글 로딩 실패:', error);
+                alert('댓글을 로드하는데 실패했습니다: ' + error.message);
+            });
+        }
+
+        function createComment() {
+            const token = getJwtToken();
+            const commentText = document.getElementById('comment-text').value.trim(); // 입력 값 앞뒤 공백 제거
+
+            if (!commentText) {
+                alert('댓글 내용을 입력하세요.');
+                return; // 댓글 내용이 없으면 함수 실행 중단
+            }
+
+
+            fetch(`/api/reviews/${reviewId}/comments`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ commentText: commentText })
+            }).then(response => response.json())
+                .then(() => {
+                    document.getElementById('comment-text').value = ''; // 입력 필드 초기화
+                    loadComments(); // 댓글 목록 새로 고침
+                }).catch(error => {
+                console.error('댓글 등록 실패:', error);
+                alert('댓글을 등록하는데 실패했습니다: ' + error.message);
+            });
+        }
+
+        function deleteComment(commentId) {
+            console.log("Attempting to delete comment with ID:", commentId);
+            const token = getJwtToken();
+            console.log("Token used:", token); // 토큰 출력
+            fetch(`/api/reviews/${reviewId}/comments/${commentId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to delete comment');
+                }
+                loadComments(); // 댓글 목록 새로 고침
+            }).catch(error => {
+                console.error('Error deleting comment:', error);
+                alert('댓글 삭제 실패: ' + error.message);
+            });
+        }
+
+        loadComments(); // 페이지 로드 시 댓글 목록 로드
+    });
+</script>
+</body>
+</html>

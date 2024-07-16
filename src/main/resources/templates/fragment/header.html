@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+  <th:block th:replace="/fragment/config.html :: configFragment"></th:block>
+  <style>
+    @font-face {
+      font-family: 'S-CoreDream-3Light';
+      src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    body, header, nav, ul, li, a, h1, button {
+      font-family: 'S-CoreDream-3Light', sans-serif;
+    }
+  </style>
+</head>
+<body>
+<header th:fragment="headerFragment">
+  <div id="logo">
+    <a href="/users/home">
+      <h1>발길 닿는 곳으로</h1>
+    </a>
+  </div>
+  <nav>
+    <ul id="topMenu">
+      <!-- 로그인 전에 보여지는 메뉴 -->
+      <div id="loggedOut" style="display: none;">
+        <li><a href="#">수도권 <span>▼</span></a>
+          <ul>
+            <li><a href="http://localhost:8080/api/regions/1">서울특별시</a></li>
+            <li><a href="http://localhost:8080/api/regions/2">경기도</a></li>
+            <li><a href="http://localhost:8080/api/regions/3">인천광역시</a></li>
+          </ul>
+        </li>
+        <li><a href="#">충청권 <span>▼</span></a>
+          <ul>
+            <li><a href="http://localhost:8080/api/regions/12">대전광역시</a></li>
+            <li><a href="http://localhost:8080/api/regions/15">세종특별자치시</a></li>
+            <li><a href="http://localhost:8080/api/regions/14">충청남도</a></li>
+            <li><a href="http://localhost:8080/api/regions/13">충청북도</a></li>
+          </ul>
+        </li>
+        <li><a href="http://localhost:8080/api/regions/16">강원권 <span>▼</span></a>
+          <ul>
+            <li><a href="#">강원도</a></li>
+          </ul>
+        </li>
+        <li><a href="#">호남권 <span>▼</span></a>
+          <ul>
+            <li><a href="http://localhost:8080/api/regions/9">광주광역시</a></li>
+            <li><a href="http://localhost:8080/api/regions/11">전라남도</a></li>
+            <li><a href="http://localhost:8080/api/regions/10">전라북도</a></li>
+          </ul>
+        </li>
+        <li><a href="#">영남권 <span>▼</span></a>
+          <ul>
+            <li><a href="http://localhost:8080/api/regions/8">경상남도</a></li>
+            <li><a href="http://localhost:8080/api/regions/7">경상북도</a></li>
+            <li><a href="http://localhost:8080/api/regions/5">대구광역시</a></li>
+            <li><a href="http://localhost:8080/api/regions/4">부산광역시</a></li>
+            <li><a href="http://localhost:8080/api/regions/6">울산광역시</a></li>
+          </ul>
+        </li>
+        <li><a href="#">제주권 <span>▼</span></a>
+          <ul>
+            <li><a href="http://localhost:8080/api/regions/17">제주도</a></li>
+          </ul>
+        </li>
+        <li><a href="/users/login_proc">로그인</a></li>
+      </div>
+
+      <!-- 로그인 후에 보여지는 메뉴 -->
+      <div id="loggedIn" style="display: none;">
+        <li><a href="#" onclick="movePage('/api/reviews/register')">글쓰기</a></li>
+        <li><a href="#">수도권 <span>▼</span></a>
+          <ul>
+            <li><a href="http://localhost:8080/api/regions/1">서울특별시</a></li>
+            <li><a href="http://localhost:8080/api/regions/2">경기도</a></li>
+            <li><a href="http://localhost:8080/api/regions/3">인천광역시</a></li>
+          </ul>
+        </li>
+        <li><a href="#">충청권 <span>▼</span></a>
+          <ul>
+            <li><a href="http://localhost:8080/api/regions/12">대전광역시</a></li>
+            <li><a href="http://localhost:8080/api/regions/15">세종특별자치시</a></li>
+            <li><a href="http://localhost:8080/api/regions/14">충청남도</a></li>
+            <li><a href="http://localhost:8080/api/regions/13">충청북도</a></li>
+          </ul>
+        </li>
+        <li><a href="#">강원권 <span>▼</span></a>
+          <ul>
+            <li><a href="http://localhost:8080/api/regions/16">강원도</a></li>
+          </ul>
+        </li>
+        <li><a href="#">호남권 <span>▼</span></a>
+          <ul>
+            <li><a href="http://localhost:8080/api/regions/9">광주광역시</a></li>
+            <li><a href="http://localhost:8080/api/regions/11">전라남도</a></li>
+            <li><a href="http://localhost:8080/api/regions/10">전라북도</a></li>
+          </ul>
+        </li>
+        <li><a href="#">영남권 <span>▼</span></a>
+          <ul>
+            <li><a href="http://localhost:8080/api/regions/8">경상남도</a></li>
+            <li><a href="http://localhost:8080/api/regions/7">경상북도</a></li>
+            <li><a href="http://localhost:8080/api/regions/5">대구광역시</a></li>
+            <li><a href="http://localhost:8080/api/regions/4">부산광역시</a></li>
+            <li><a href="http://localhost:8080/api/regions/6">울산광역시</a></li>
+          </ul>
+        </li>
+        <li><a href="#">제주권 <span>▼</span></a>
+          <ul>
+            <li><a href="http://localhost:8080/api/regions/17">제주도</a></li>
+          </ul>
+        </li>
+
+
+        <li>
+          <a class="nav-link" href="#" id="myPageLink">My Page</a>
+        </li>
+        <script>
+          document.addEventListener('DOMContentLoaded', function () {
+            var myPageLink = document.getElementById('myPageLink');
+            if (myPageLink) {
+              myPageLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                const token = localStorage.getItem('jwtToken');
+                if (!token) {
+                  alert('Please log in to view this page.');
+                } else {
+                  fetch('/api/my-page', {
+                    method: 'GET',
+                    headers: {
+                      'Authorization': 'Bearer ' + token,
+                      'Content-Type': 'application/json'
+                    }
+                  }).then(response => {
+                    if (response.ok) {
+                      response.json().then(data => {
+                        console.log('My Page Data:', data);
+                        // 데이터 로드가 성공한 후 페이지 이동
+                        window.location.href = '/users/myPage'; // 이동 로직을 fetch 성공 후로 이동
+                      });
+                    } else {
+                      alert('Unable to load the page. Please log in again.');
+                    }
+                  }).catch(error => {
+                    console.error('Failed to fetch:', error);
+                  });
+                }
+              });
+            } else {
+              console.error('Element with ID myPageLink not found.');
+            }
+          });
+        </script>
+
+        <li>
+          <form action="/users/logout" method="post">
+            <button id="logoutButton">로그아웃</button>
+          </form>
+        </li>
+      </div>
+    </ul>
+  </nav>
+
+  <script src="/js/jwtRead.js"></script>
+</header>
+</body>
+</html>

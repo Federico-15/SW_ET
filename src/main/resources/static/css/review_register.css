@@ -1,0 +1,128 @@
+@font-face {
+    font-family: 'S-CoreDream-3Light';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+#pageTitle h2{
+    margin-top: 10px;
+    margin-left: 50px;
+    font-family: 'S-CoreDream-3Light';
+}
+hr{
+    border: none; /* 기본 테두리를 제거합니다 */
+    border-top: 1px solid #ccc; /* 상단 테두리를 추가하고 색상을 지정합니다*/
+}
+
+#reviewForm .star_rating{
+    display: flex;
+    justify-content: center; /* 요소를 수평 가운데로 정렬합니다. */
+    align-items: center; /* 요소를 수직 가운데로 정렬합니다. */
+    flex-direction: row;
+}
+#reviewForm {
+    display: flex;
+    justify-content: center; /* 요소를 수평 가운데로 정렬합니다. */
+    align-items: center; /* 요소를 수직 가운데로 정렬합니다. */
+    flex-direction: column;
+    font-family: 'S-CoreDream-3Light';
+}
+
+
+/* 평점(별) 스타일 */
+.star_rating {
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+}
+.star_rating .star {
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+    display: inline-block;
+    background: url('../images/empty_star.png') no-repeat;  /* 경로 수정하기 */
+    background-size: 100%;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+.star_rating .star.on {
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+    display: inline-block;
+    background: url('../images/full_star.png') no-repeat; /* 경로 수정하기 */
+    background-size: 100%;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+#reviewTitle {
+    width: 600px;
+    box-sizing: border-box;
+    display: inline-block;
+    margin: 15px 0;
+    background: #F3F4F8;
+    border: 0;
+    border-radius: 10px;
+    height: 50px;
+    resize: none;
+    padding: 15px;
+}
+
+/* select-container 스타일 수정 */
+.select-container {
+    display: flex;
+    justify-content: space-between;
+    width: 600px;
+    margin: 15px 0;
+}
+.region {
+    width: 48%;
+    box-sizing: border-box;
+    display: inline-block;
+    margin: 15px 0;
+    background: #F3F4F8;
+    border: 0;
+    border-radius: 10px;
+    height: 50px;
+    resize: none;
+    padding: 15px;
+}
+
+#reviewText {
+    width: 600px;
+    box-sizing: border-box;
+    display: inline-block;
+    margin: 15px 0;
+    background: #F3F4F8;
+    border: 0;
+    border-radius: 10px;
+    height: 200px;
+    resize: none;
+    padding: 15px;
+}
+/* 이미지 파일 로드 버튼 */
+#insert_img{
+    padding: 5px;
+    cursor: pointer;
+}
+/* 리뷰 등록 버튼 */
+#review_submit{
+    width: 120px;
+    padding: 10px;  /* 버튼의 세로 높이 지정*/
+    background-color: rgb(96, 189, 255);
+    border: none;
+    color: #fff;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 30px;;
+}
+#review_submit:hover {
+    background-color: #61aeff;
+}

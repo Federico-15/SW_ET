@@ -1,0 +1,468 @@
+<!--
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${destination.title} + ' - Details'">Destination Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        @font-face {
+            font-family: 'S-CoreDream-3Light';
+            src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            font-family: 'S-CoreDream-3Light', sans-serif;
+        }
+        .main-container {
+            padding-top: 100px; /* 헤더와의 간격 확보 */
+        }
+        .content-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 6px 10px rgba(0,0,0,0.1);
+            animation: fadeIn 1s ease-in-out;
+            justify-content: center;
+            position: relative; /* 부모 요소에 상대 위치 지정 */
+        }
+        .header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            position: relative; /* 부모 요소에 상대 위치 지정 */
+        }
+        .favorite-btn {
+            background-color: transparent;
+            border: none;
+            color: white;
+            font-size: 24px;
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+        .favorite-btn .fas {
+            color: #dc3545; /* 찜한 상태의 하트 색상 */
+        }
+        .favorite-btn .far {
+            color: #ffffff; /* 찜하지 않은 상태의 하트 색상 */
+        }
+        .carousel-inner img {
+            width: 100%;
+            height: auto;
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            background-color: rgba(0,0,0,0.5);
+            border-radius: 50%;
+        }
+        .carousel-control-prev:hover,
+        .carousel-control-next:hover {
+            background-color: rgba(0,0,0,0.7);
+        }
+        .detail-section {
+            margin-top: 20px;
+        }
+        .detail-section h3 {
+            margin-top: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #007bff;
+            color: #007bff;
+        }
+        .contact-info p {
+            margin-bottom: 5px;
+        }
+        .contact-info i {
+            margin-right: 8px;
+            color: #007bff;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .info-section {
+            background-color: #f1f1f1;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .info-section p {
+            margin: 0;
+            padding: 5px 0;
+        }
+        .info-section strong {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{fragment/header :: header}"></div>
+<div class="main-container">
+    <div class="container content-container">
+        <div class="header text-center">
+            <button class="favorite-btn" th:attr="data-destination-id=${destination.id}" onclick="toggleFavorite(this)">
+                <i class="far fa-heart"></i>
+            </button>
+            <h1 th:text="${destination.title}">Destination Title</h1>
+        </div>
+        &lt;!&ndash; 이미지 슬라이더 구현 &ndash;&gt;
+        <div id="carouselImages" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                <div th:if="${#lists.isEmpty(destination.imageUrls)}" class="carousel-item active">
+                    <img src="/images/default-image.jpg" alt="Default Image" class="d-block w-100" style="width: 100%; height: 500px; object-fit: cover;">
+                </div>
+                <div th:each="image, stat : ${destination.imageUrls}" th:classappend="${stat.first} ? 'carousel-item active' : 'carousel-item'">
+                    <img th:src="${image}" alt="Slide Image" class="d-block w-100" style="width: 100%; height: 500px; object-fit: cover;">
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselImages" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselImages" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+
+        <div class="detail-section">
+            <div class="info-section">
+                <p><strong>지역:</strong> <span th:text="${destination.regionName}"></span></p>
+                <p><strong>상세지역:</strong> <span th:text="${destination.subRegionName}"></span></p>
+                &lt;!&ndash; 한줄 설명이 N/A인 경우 숨기기 &ndash;&gt;
+                <p th:if="${destination.oneLineDesc != 'N/A'}"><strong>한줄 설명:</strong> <span th:text="${destination.oneLineDesc}"></span></p>
+            </div>
+            <h3>세부 설명</h3>
+            <p th:text="${destination.detailedInfo}"></p>
+            <h3>상세 정보</h3>
+            <div class="contact-info">
+                <div th:each="entry : ${destination.contactInfo}">
+                    <p><i class="fas fa-info-circle"></i><strong th:text="${entry.key}"></strong>: <span th:text="${entry.value}"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{fragment/footer :: footer}"></div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    function toggleFavorite(button) {
+        const destinationId = button.getAttribute('data-destination-id');
+        const action = button.classList.contains('btn-outline-danger') ? 'POST' : 'DELETE';
+        const url = '/api/favorites/' + destinationId;
+
+        const token = localStorage.getItem('jwtToken');
+
+        fetch(url, {
+            method: action,
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            if (response.ok) {
+                if (action === 'POST') {
+                    button.classList.remove('btn-outline-danger');
+                    button.classList.add('btn-danger');
+                    button.innerHTML = '<i class="fas fa-heart"></i>';
+                } else {
+                    button.classList.remove('btn-danger');
+                    button.classList.add('btn-outline-danger');
+                    button.innerHTML = '<i class="far fa-heart"></i>';
+                }
+            } else {
+                response.text().then(text => {
+                    console.error('Error:', text);
+                    alert('찜 상태를 변경하는데 실패했습니다.');
+                });
+            }
+        }).catch(error => {
+            console.error('Fetch error:', error);
+            alert('서버와 통신 중 오류가 발생했습니다.');
+        });
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        const favoriteButtons = document.querySelectorAll('.favorite-btn');
+        favoriteButtons.forEach(button => {
+            const destinationId = button.getAttribute('data-destination-id');
+            checkFavoriteStatus(destinationId, button);
+        });
+    });
+
+    function checkFavoriteStatus(destinationId, button) {
+        const token = localStorage.getItem('jwtToken');
+        fetch(`/api/favorites/status/${destinationId}`, {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+            .then(response => response.json())
+            .then(isFavorite => {
+                if (isFavorite) {
+                    button.classList.remove('btn-outline-danger');
+                    button.classList.add('btn-danger');
+                    button.innerHTML = '<i class="fas fa-heart"></i>';
+                } else {
+                    button.classList.remove('btn-danger');
+                    button.classList.add('btn-outline-danger');
+                    button.innerHTML = '<i class="far fa-heart"></i>';
+                }
+            })
+            .catch(error => console.error('Error fetching favorite status:', error));
+    }
+</script>
+</body>
+</html>
+-->
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${destination.title} + ' - Details'">Destination Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        @font-face {
+            font-family: 'S-CoreDream-3Light';
+            src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            font-family: 'S-CoreDream-3Light', sans-serif;
+        }
+        .main-container {
+            padding-top: 100px; /* 헤더와의 간격 확보 */
+        }
+        .content-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 6px 10px rgba(0,0,0,0.1);
+            animation: fadeIn 1s ease-in-out;
+            justify-content: center;
+            position: relative; /* 부모 요소에 상대 위치 지정 */
+        }
+        .header {
+            background-color: #343a40; /* 배경색 변경 */
+            color: #ffffff; /* 텍스트 색상 변경 */
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            position: relative; /* 부모 요소에 상대 위치 지정 */
+        }
+        .favorite-btn {
+            background-color: transparent;
+            border: none;
+            color: white;
+            font-size: 24px;
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+        .favorite-btn .fas {
+            color: #dc3545; /* 찜한 상태의 하트 색상 */
+        }
+        .favorite-btn .far {
+            color: #ffffff; /* 찜하지 않은 상태의 하트 색상 */
+        }
+        .carousel-inner img {
+            width: 100%;
+            height: auto;
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            background-color: rgba(0,0,0,0.5);
+            border-radius: 50%;
+        }
+        .carousel-control-prev:hover,
+        .carousel-control-next:hover {
+            background-color: rgba(0,0,0,0.7);
+        }
+        .detail-section {
+            margin-top: 20px;
+        }
+        .detail-section h3 {
+            margin-top: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #333;
+            color: #333;
+        }
+        .contact-info p {
+            margin-bottom: 5px;
+        }
+        .contact-info i {
+            margin-right: 8px;
+            color: #333;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .info-section {
+            background-color: #f1f1f1;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .info-section p {
+            margin: 0;
+            padding: 5px 0;
+        }
+        .info-section strong {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{fragment/header :: header}"></div>
+<div class="main-container">
+    <div class="container content-container">
+        <div class="header text-center">
+            <button class="favorite-btn" th:attr="data-destination-id=${destination.id}" onclick="toggleFavorite(this)">
+                <i class="far fa-heart"></i>
+            </button>
+            <h1 th:text="${destination.title}">Destination Title</h1>
+        </div>
+        <!-- 이미지 슬라이더 구현 -->
+        <div id="carouselImages" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                <div th:if="${#lists.isEmpty(destination.imageUrls)}" class="carousel-item active">
+                    <img src="/images/default-image.jpg" alt="Default Image" class="d-block w-100" style="width: 100%; height: 500px; object-fit: cover;">
+                </div>
+                <div th:each="image, stat : ${destination.imageUrls}" th:classappend="${stat.first} ? 'carousel-item active' : 'carousel-item'">
+                    <img th:src="${image}" alt="Slide Image" class="d-block w-100" style="width: 100%; height: 500px; object-fit: cover;">
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselImages" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselImages" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+
+        <div class="detail-section">
+            <div class="info-section">
+                <p><strong>지역:</strong> <span th:text="${destination.regionName}"></span></p>
+                <p><strong>상세지역:</strong> <span th:text="${destination.subRegionName}"></span></p>
+                <!-- 한줄 설명이 N/A인 경우 숨기기 -->
+                <p th:if="${destination.oneLineDesc != 'N/A'}"><strong>한줄 설명:</strong> <span th:text="${destination.oneLineDesc}"></span></p>
+            </div>
+            <h3>세부 설명</h3>
+            <p th:text="${destination.detailedInfo}"></p>
+            <h3>상세 정보</h3>
+            <div class="contact-info">
+                <div th:each="entry : ${destination.contactInfo}">
+                    <p><i class="fas fa-info-circle"></i><strong th:text="${entry.key}"></strong>: <span th:text="${entry.value}"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{fragment/footer :: footer}"></div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    function toggleFavorite(button) {
+        const destinationId = button.getAttribute('data-destination-id');
+        const action = button.classList.contains('btn-outline-danger') ? 'POST' : 'DELETE';
+        const url = '/api/favorites/' + destinationId;
+
+        const token = localStorage.getItem('jwtToken');
+
+        fetch(url, {
+            method: action,
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            if (response.ok) {
+                if (action === 'POST') {
+                    button.classList.remove('btn-outline-danger');
+                    button.classList.add('btn-danger');
+                    button.innerHTML = '<i class="fas fa-heart"></i>';
+                } else {
+                    button.classList.remove('btn-danger');
+                    button.classList.add('btn-outline-danger');
+                    button.innerHTML = '<i class="far fa-heart"></i>';
+                }
+            } else {
+                response.text().then(text => {
+                    console.error('Error:', text);
+                    alert('찜 상태를 변경하는데 실패했습니다.');
+                });
+            }
+        }).catch(error => {
+            console.error('Fetch error:', error);
+            alert('서버와 통신 중 오류가 발생했습니다.');
+        });
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        const favoriteButtons = document.querySelectorAll('.favorite-btn');
+        favoriteButtons.forEach(button => {
+            const destinationId = button.getAttribute('data-destination-id');
+            checkFavoriteStatus(destinationId, button);
+        });
+    });
+
+    function checkFavoriteStatus(destinationId, button) {
+        const token = localStorage.getItem('jwtToken');
+        fetch(`/api/favorites/status/${destinationId}`, {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+            .then(response => response.json())
+            .then(isFavorite => {
+                if (isFavorite) {
+                    button.classList.remove('btn-outline-danger');
+                    button.classList.add('btn-danger');
+                    button.innerHTML = '<i class="fas fa-heart"></i>';
+                } else {
+                    button.classList.remove('btn-danger');
+                    button.classList.add('btn-outline-danger');
+                    button.innerHTML = '<i class="far fa-heart"></i>';
+                }
+            })
+            .catch(error => console.error('Error fetching favorite status:', error));
+    }
+</script>
+</body>
+</html>
